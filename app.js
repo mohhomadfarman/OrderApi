@@ -3,11 +3,12 @@ const mongoose = require('mongoose');
 const http = require('http');
 const socketIO = require('socket.io');
 const orderRoutes = require('./routes/orderRoutes');
-
+const dotenv = require("dotenv");
+dotenv.config();
 const app = express();
 const server = http.createServer(app);
 const io = socketIO(server);
-const port = 3000;
+const port = process.env.PORT;
 
 app.use(express.json());
 
