@@ -1,5 +1,9 @@
 const Order = require("../modals/Order");
 const rateCard = require("../rate");
+var easyinvoice = require('easyinvoice');
+var fs = require('fs');
+
+
 
 exports.getAllOrders = async (req, res) => {
   try {
@@ -49,6 +53,56 @@ exports.createDryCleaningOrder = async (req, res) => {
           address,
       });
 
+      var data = {
+        "client": {
+          "company": "Client Corp",
+          "address": "Clientstreet 456",
+          "zip": "4567 CD",
+          "city": "Clientcity",
+          "country": "Clientcountry"
+      },
+      "sender": {
+        "company": "Sample Corp",
+        "address": "Sample Street 123",
+        "zip": "1234 AB",
+        "city": "Sampletown",
+        "country": "Samplecountry"
+    },
+    "images": {
+      logo: "https://public.easyinvoice.cloud/img/logo_en_original.png",
+    },
+    "information": {
+      // Invoice number
+      "number": "2021.0001",
+      // Invoice data
+      "date": "12-12-2021",
+      // Invoice due date
+      "due-date": "31-12-2021"
+  },
+  "products": [
+    {
+        "quantity": "2",
+        "description": "Test1",
+        "tax-rate": 6,
+        "price": 33.87
+    },
+    {
+        "quantity": "4",
+        "description": "Test2",
+        "tax-rate": 21,
+        "price": 10.45
+    }
+],
+"bottomNotice": "Kindly pay your invoice within 15 days.",
+"settings": {
+  "currency": "USD",
+}
+      };
+      easyinvoice.createInvoice(data, function (result) {
+        fs.writeFileSync("./Invoice/invoice.pdf", result.pdf, 'base64');
+     });
+    
+
       res.status(201).json(order);
 
       // Emit a notification when a new order is placed
@@ -74,7 +128,6 @@ exports.OrderDetails = async (req,res) =>{
     res.status(500).json({ error: error.message });
   }
 };
-
 
 exports.updateOrderStatus = async (req, res) => {
   const { orderId } = req.params;
