@@ -99,7 +99,7 @@ exports.createDryCleaningOrder = async (req, res) => {
 }
       };
       easyinvoice.createInvoice(data, function (result) {
-        fs.writeFileSync("./Invoice/invoice.pdf", result.pdf, 'base64');
+        fs.writeFileSync(`./Invoice/${order._id}_invoice.pdf`, result.pdf, 'base64');
      });
     
 
