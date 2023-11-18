@@ -19,6 +19,7 @@ const orderSchema = new mongoose.Schema({
   articles: [articleSchema],
   totalPrice: { type: Number },
   status: { type: String, enum: ['Pending', 'Processing', 'Ready', 'Delivered'], default: 'Pending' },
+  click: { type: String, enum: ['New', 'Old'], default: 'New' },
   pickupDate: { type: Date, required: true },
   deliveryDate: { type: Date, required: true },
   createdAt: { type: Date, default: Date.now },
