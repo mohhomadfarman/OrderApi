@@ -25,6 +25,7 @@ app.set('io', io);
 
 app.use('/api', orderRoutes);
 app.use('/auth', authRoutes);
+app.use('/api/Invoice',express.static('Invoice'));
 // Socket.IO connection event
 io.on('connection', (socket) => {
   console.log('A user connected');

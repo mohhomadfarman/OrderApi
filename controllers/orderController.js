@@ -103,7 +103,7 @@ exports.createDryCleaningOrder = async (req, res) => {
      });
     
 
-      res.status(201).json(order);
+      res.status(201).json({order:order,invoice:`${order._id}_invoice.pdf`});
 
       // Emit a notification when a new order is placed
       const io = req.app.get('io');
