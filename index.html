@@ -11,12 +11,13 @@
   <div id="notifications"></div>
   <script src="https://code.responsivevoice.org/responsivevoice.js?key=yo2hrrcW"></script>
   <script>
-    const socket = io('http://localhost:3000'); // Replace with your server URL
+    const socket = io('http://localhost:8000'); // Replace with your server URL
+    // const socket = io('https://orderapi-production.up.railway.app'); // Replace with your server URL
 
     socket.on('newDryCleaningOrder', (data) => {
       const notificationsDiv = document.getElementById('notifications');
       const notificationNode = document.createElement('div');
-      notificationNode.innerText = `New order from ${data.customerName} with total price $${data.totalPrice}`;
+      notificationNode.innerText = `New order from ${data.customerName} with total price ₹  ${data.totalPrice}`;
       notificationsDiv.appendChild(notificationNode);
 // console.log(data)
       // Use text-to-speech

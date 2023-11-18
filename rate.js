@@ -1,6 +1,6 @@
 const rateCard = {
     // Dry Cleaning Rates
-    'Coat': 300,
+    'Coat': 150,
     'Trouser/Jeans': 150,
     'Shirt': 150,
     'Sweater(FS)': 150,
