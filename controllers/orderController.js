@@ -78,6 +78,17 @@ exports.updateOrderStatus = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
+exports.updateOrderClick = async (req, res) => {
+  const { orderId } = req.params;
+  const { click } = req.body;
+
+  try {
+    const order = await Order.findByIdAndUpdate(orderId, { click }, { new: true });
+    res.json(order);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
 
 exports.cancelOrder = async (req, res) => {
   const { orderId } = req.params;
