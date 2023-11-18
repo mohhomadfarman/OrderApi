@@ -19,7 +19,7 @@
       const notificationNode = document.createElement('div');
       notificationNode.innerText = `New order from ${data.customerName} with total price ₹  ${data.totalPrice}`;
       notificationsDiv.appendChild(notificationNode);
-// console.log(data)
+console.log(data)
       // Use text-to-speech
       speakNotification(`New order from ${data.customerName} with total price ₹${data.totalPrice}`);
       setTimeout(()=>{

@@ -54,6 +54,7 @@ exports.createDryCleaningOrder = async (req, res) => {
       // Emit a notification when a new order is placed
       const io = req.app.get('io');
       io.emit('newDryCleaningOrder', {
+        data:order,
           customerName,
           totalPrice,
           pickupDate: pickupDateTime,
