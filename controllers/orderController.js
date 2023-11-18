@@ -65,7 +65,16 @@ exports.createDryCleaningOrder = async (req, res) => {
   }
 };
 
-  
+exports.OrderDetails = async (req,res) =>{
+  const { orderId } = req.params;
+  try {
+    const orders = await Order.findById(orderId);
+    res.json(orders);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 
 exports.updateOrderStatus = async (req, res) => {
   const { orderId } = req.params;
