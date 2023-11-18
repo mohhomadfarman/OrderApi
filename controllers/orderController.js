@@ -92,8 +92,11 @@ exports.updateOrderClick = async (req, res) => {
   const { click } = req.body;
 
   try {
-    const order = await Order.findByIdAndUpdate(orderId, { click }, { new: true });
-    res.json(order);
+    const orderCheck = await Order.findById(orderId);
+if(orderCheck?.click === req.body.click){
+  res.send("Open")
+}
+
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
