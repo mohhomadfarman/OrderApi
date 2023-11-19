@@ -4,13 +4,15 @@ const http = require('http');
 const socketIO = require('socket.io');
 const orderRoutes = require('./routes/orderRoutes');
 const dotenv = require("dotenv");
+
 const authRoutes = require('./auth');
+var cors = require('cors')
 dotenv.config();
 const app = express();
 const server = http.createServer(app);
 const io = socketIO(server);
 const port = process.env.PORT;
-
+app.use(cors())
 app.use(express.json());
 
 mongoose.connect('mongodb+srv://mohhomadfarman:2psfCQztmQjcWWjB@webforum.fgkdlah.mongodb.net/Drycleaning', { useNewUrlParser: true, useUnifiedTopology: true });
