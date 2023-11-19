@@ -12,7 +12,7 @@ const Enquery = new mongoose.Schema({
     customerName: { type: String, required: true },
     mobileNumber: { type: String, required: true },
     address: addressSchema, // Include the address schema
-    status: { type: String, enum: ['Pending', 'Processing', 'Ready', 'Delivered'], default: 'Pending' },
+    status: { type: String, enum: [true, false], default: true },
     click: { type: String, enum: ['New', 'Old'], default: 'New' },
     pickupDate: { type: Date, required: true },
     deliveryDate: { type: Date, required: true },
