@@ -14,7 +14,8 @@
     const socket = io('http://localhost:8000'); // Replace with your server URL
     // const socket = io('https://orderapi-production.up.railway.app'); // Replace with your server URL
 
-    socket.on('newDryCleaningOrder', (data) => {
+    // socket.on('newDryCleaningOrder', (data) => {
+    socket.on('newEnqueryOrders', (data) => {
       const notificationsDiv = document.getElementById('notifications');
       const notificationNode = document.createElement('div');
       notificationNode.innerText = `New order from ${data.customerName} with total price ₹  ${data.totalPrice}`;
