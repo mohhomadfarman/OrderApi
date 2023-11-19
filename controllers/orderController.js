@@ -4,8 +4,78 @@ const rateCard = require("../rate");
 var easyinvoice = require('easyinvoice');
 var fs = require('fs');
 
+// enquiries
+exports.getEnquiries = async (req, res) => {
+  try {
+    const orders = await EnqueryOrders.find();
+    res.json(orders);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+exports.EnqueryOrders = async (req, res) => {
+  const { customerName, mobileNumber,  pickupDate, deliveryDate, address } = req.body;
+
+  try {
+      // Check if pickupDate and deliveryDate are provided
+      if (!pickupDate || !deliveryDate) {
+          throw new Error('Both pickupDate and deliveryDate are required.');
+      }
+
+      // Validate pickupDate and deliveryDate
+      const pickupDateTime = new Date(pickupDate);
+      const deliveryDateTime = new Date(deliveryDate);
+
+      if (pickupDateTime >= deliveryDateTime) {
+          throw new Error('Invalid date range. Pickup date must be before delivery date.');
+      }
 
 
+
+      const order = await EnqueryOrders.create({
+          customerName,
+          mobileNumber,
+          pickupDate: pickupDateTime,
+          deliveryDate: deliveryDateTime,
+          address,
+      });
+
+      res.status(201).json(order);
+
+      // Emit a notification when a new order is placed
+      const io = req.app.get('io');
+      io.emit('newEnqueryOrders', {
+        data:order,
+          customerName,
+          pickupDate: pickupDateTime,
+          deliveryDate: deliveryDateTime,
+      });
+  } catch (error) {
+      res.status(400).json({ error: error.message });
+  }
+};
+
+exports.enqueryClick = async (req, res) => {
+  const { orderId } = req.params;
+  const { click } = req.body;
+
+  try {
+    const orderCheck = await EnqueryOrders.findOne({_id:orderId});
+    if(orderCheck._id === orderId){
+      res.json({status:"Open"})
+    }else{
+      const order = await EnqueryOrders.findByIdAndUpdate(orderId, { click }, { new: true });
+      res.json(order);
+    }
+
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+
+// Crdeate Order
 exports.getAllOrders = async (req, res) => {
   try {
     const orders = await Order.find();
@@ -120,47 +190,7 @@ exports.createDryCleaningOrder = async (req, res) => {
   }
 };
 
-exports.EnqueryOrders = async (req, res) => {
-  const { customerName, mobileNumber,  pickupDate, deliveryDate, address } = req.body;
 
-  try {
-      // Check if pickupDate and deliveryDate are provided
-      if (!pickupDate || !deliveryDate) {
-          throw new Error('Both pickupDate and deliveryDate are required.');
-      }
-
-      // Validate pickupDate and deliveryDate
-      const pickupDateTime = new Date(pickupDate);
-      const deliveryDateTime = new Date(deliveryDate);
-
-      if (pickupDateTime >= deliveryDateTime) {
-          throw new Error('Invalid date range. Pickup date must be before delivery date.');
-      }
-
-
-
-      const order = await EnqueryOrders.create({
-          customerName,
-          mobileNumber,
-          pickupDate: pickupDateTime,
-          deliveryDate: deliveryDateTime,
-          address,
-      });
-
-      res.status(201).json(order);
-
-      // Emit a notification when a new order is placed
-      const io = req.app.get('io');
-      io.emit('newEnqueryOrders', {
-        data:order,
-          customerName,
-          pickupDate: pickupDateTime,
-          deliveryDate: deliveryDateTime,
-      });
-  } catch (error) {
-      res.status(400).json({ error: error.message });
-  }
-};
 exports.OrderDetails = async (req,res) =>{
   const { orderId } = req.params;
   try {
